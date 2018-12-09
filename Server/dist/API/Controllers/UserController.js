@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 var user_1 = require("../../Schemas/user");
 function getAllUsers(re, res) {
     return user_1.User.find({}, function (err, users) {
@@ -23,9 +23,14 @@ function getUserById(req, res) {
     });
 }
 exports.getUserById = getUserById;
-function createUser(req, res) {
-    var newUser = new user_1.User(req.body);
-    newUser.save(function (err, user) {
+function saveUser(req, res) {
+    var user = new user_1.User(req.body);
+    var now = new Date();
+    if (!user.creationDate) {
+        user.creationDate = now;
+    }
+    user.updateDate = now;
+    user.save(function (err, user) {
         if (err) {
             res.send(err);
         }
@@ -34,4 +39,4 @@ function createUser(req, res) {
         }
     });
 }
-exports.createUser = createUser;
+exports.saveUser = saveUser;

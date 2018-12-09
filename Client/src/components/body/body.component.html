@@ -1,0 +1,10 @@
+<div class="container-fluid">
+  <div class="card-columns">
+    <div *ngFor="let picture of pictures">
+        <app-card class="col-xl-2 col-lg-4 col-md-6" [path]="picture.path" [name]="picture.name" (click)="displayPreview(picture.path)"></app-card>
+    </div>
+  </div>
+  <app-preview id="preview" [currentPath]="currentPath" hidden>
+
+  </app-preview>
+</div>

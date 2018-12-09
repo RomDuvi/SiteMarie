@@ -1,0 +1,16 @@
+.preview {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.24), 0 6px 20px 0 rgba(0, 0, 0, 0.35);
+    position: relative;
+}
+
+.preview img{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    width: 100%;
+}
+
+.exit{
+    position: absolute;
+    top:7px;
+    right:7px;
+}

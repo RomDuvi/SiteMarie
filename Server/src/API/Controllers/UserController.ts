@@ -22,9 +22,14 @@ export function getUserById(req: Request, res: Response){
     })
 }
 
-export function createUser(req: Request, res: Response){
-    var newUser = new User(req.body);
-    newUser.save((err,user: IUser)=>{
+export function saveUser(req: Request, res: Response){
+    var user = new User(req.body);
+    let now = new Date();
+    if(!user.creationDate){
+        user.creationDate = now;
+    }
+    user.updateDate = now;
+    user.save((err,user: IUser)=>{
         if(err){
             res.send(err);
         }else{
