@@ -1,6 +1,11 @@
 <div class="card">
-  <img class="card-img-top" [src]="path" [alt]="name">
-  <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
-      <h5 class="card-title">{{name}}</h5>
+  <div *ngIf="picture.loaded" >
+    <img class="card-img-top" [alt]="picture.displayName" [src]="picture.src" />
+    <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
+      <h5 class="card-title">{{picture.displayName}}</h5>
     </div>
+  </div>
+  <div *ngIf="!picture.loaded" id="loading" class="align-middle">
+    <img src="../../assets/loading.gif" />
+  </div>
 </div>

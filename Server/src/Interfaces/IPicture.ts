@@ -1,7 +1,10 @@
-import { ICategory } from './ICategory';
-export interface IPicture{
-    name: string;
+import { IBaseModel } from './IBaseModel';
+export interface IPicture extends IBaseModel{
+    displayName: string;
     path: string;
     description?: string;
-    category: ICategory;
+    categories: any;
+    file: any;
+    fileName: string;
+    type: string;
 }

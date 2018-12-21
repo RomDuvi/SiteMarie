@@ -1,0 +1,6 @@
+{
+    "baseUrl": "http://localhost:8081/",
+    "pictureUrl": "pictures",
+    "userUrl": "users",
+    "categoryUrl": "categories"
+}

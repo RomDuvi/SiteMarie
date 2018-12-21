@@ -1,5 +1,5 @@
-import { Document } from 'mongoose';
-export interface IBaseModel extends Document {
+export interface IBaseModel {
+    id: string;
     creationDate: Date;
     updateDate: Date;
 }

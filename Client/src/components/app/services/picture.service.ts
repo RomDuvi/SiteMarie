@@ -1,44 +1,71 @@
 import { Injectable } from '@angular/core';
 import { Picture } from '../../../models/picture.model';
-import { Observable } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ConfigService } from '../config/config.service';
-import { IConfig } from '../config/config.model';
-import { catchError } from 'rxjs/operators';
-
-const httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Authorization': 'my-auth-token'
-    })
-};
+import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ConfigService } from './config/config.service';
 
 @Injectable()
 export class PictureService extends ConfigService {
-    config: IConfig;
     apiUrl: string;
+    private _pictures: BehaviorSubject<Picture[]>;
+    private dataStore: {
+        pictures: Picture[]
+    };
 
     error;
-    constructor(protected http: HttpClient) {
-        super(http);
-        // this.getConfig().subscribe((data: IConfig) => {
-        //     this.config = {...data};
-        //     this.apiUrl = this.config.baseUrl + this.config.pictureUrl;
-        // });
-        this.apiUrl = 'http://localhost:8081/pictures';
+    constructor(protected http: HttpClient, private sanitizer: DomSanitizer) {
+        super();
+        this.apiUrl = this.config.baseUrl + this.config.pictureUrl;
+        this.dataStore = { pictures: [] };
+        this._pictures = <BehaviorSubject<Picture[]>>new BehaviorSubject([]);
     }
 
-    addPicture(picture: Picture): Observable<Picture> {
-        return this.http.post<Picture>(this.apiUrl, picture, httpOptions)
-                        .pipe(
-                            catchError(this.handleError)
-                        );
+    private assign() {
+        this._pictures.next(Object.assign({}, this.dataStore).pictures);
     }
 
-    getPictures(): Observable<Picture[]> {
-        return this.http.get<Picture[]>(this.apiUrl, httpOptions)
-                        .pipe(
-                            catchError(this.handleError)
-                        );
+    addPicture(picture: Picture) {
+        this.http.post<Picture>(this.apiUrl, picture, this.httpOptions).subscribe(data => {
+            this.dataStore.pictures.push(data);
+            this.assign();
+        });
     }
+
+    getPictures(callback?) {
+        if (this.dataStore.pictures.length > 0) {
+            this.assign();
+            if (callback) {
+                callback();
+            }
+            return;
+        }
+        this.http.get<Picture[]>(this.apiUrl, this.httpOptions)
+                .subscribe(data => {
+                    this.dataStore.pictures = data;
+                    this.assign();
+                    if (callback) {
+                        callback();
+                    }
+                }, err => {throw new Error(err); });
+    }
+
+    getPictureFile(pictureId: string): Picture {
+        const picture = this.dataStore.pictures.find(pic => pic.id === pictureId);
+        if (picture.src) {
+            return picture;
+        }
+        this.http.get(this.apiUrl + '/file/' + pictureId, this.httpOptions).subscribe(data => {
+            const src = this.sanitizer.bypassSecurityTrustResourceUrl(`data:${picture.type};base64,${data['file']}`);
+            picture.src = src;
+            picture.loaded = true;
+        });
+        return picture;
+    }
+
+    getPictureByIndex(index: number): Picture {
+        return this.dataStore.pictures[index];
+    }
+
+    get pictures() { return this._pictures.asObservable(); }
 }

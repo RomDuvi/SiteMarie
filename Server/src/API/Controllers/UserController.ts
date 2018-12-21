@@ -1,39 +1,45 @@
-import { User } from '../../Schemas/user';
 import { IUser } from '../../Interfaces/IUser';
 import { Request, Response } from 'express';
+import { User } from '../../Client/Database/User';
+var Promise  = require('bluebird');
+var bcrypt = Promise.promisifyAll(require('bcrypt'));
 
-export function getAllUsers(re: Request, res: Response){
-    return User.find({},(err, users: IUser[]) => {
-        if(err){
-            res.send(err);
-        }else{
-            res.json(users);
-        }
-    });
+export function getAllUsers(req: Request, res: Response){
+    User.fetchAll().then((users: IUser[])=>{
+        res.json(users);
+    }).catch(err => res.send(err));
 }
 
 export function getUserById(req: Request, res: Response){
-    return User.findById(req.params.userId, (err, user:IUser)=>{
-        if(err){
-            res.send(err)
-        }else{
+    new User({'id':req.params.pictureId})
+        .fetch()
+        .then((user: IUser) => {
             res.json(user);
-        }
-    })
+        }).catch(err => res.send(err));
 }
 
 export function saveUser(req: Request, res: Response){
-    var user = new User(req.body);
-    let now = new Date();
-    if(!user.creationDate){
-        user.creationDate = now;
-    }
-    user.updateDate = now;
-    user.save((err,user: IUser)=>{
-        if(err){
-            res.send(err);
-        }else{
+    var user: IUser = req.body;
+    user.username = user.username.trim();
+    bcrypt.hash(user.password, 10).then((hash, err) => {
+        if(err) throw new Error(err.message);
+        user.password = hash;
+        User.forge(user)
+        .save()
+        .then((user: IUser) => {
             res.json(user);
-        }
-    });
+        }).catch(err=>res.send(err));
+      });
+
+    
+}
+
+export function login(req: Request, res: Response) {
+    User.login(req.body.username, req.body.password)
+        .then((user) => {
+            res.json(user.omit('password'));
+        })
+        .catch((err: Error) => {
+            res.status(401).send(err.message);
+        })
 }

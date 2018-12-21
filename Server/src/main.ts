@@ -1,15 +1,19 @@
 import bodyParser = require("body-parser");
-import { userRoutes, pictureRoutes, categoryRoutes } from './API/Routes/Routes';
+import { categoryRoutes, pictureRoutes, userRoutes } from './API/Routes/Routes';
 import * as express from 'express';
-import * as mongoose from 'mongoose';
-import * as cors from 'cors';
-
+import { Config } from './Client/config';
 export const app = express();
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const config = new Config();
 
-mongoose.connect('mongodb://localhost/SiteMarie');
 
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(cors());
+app.use(bodyParser.json({limit:'50mb'}));
+const corsOptions = {
+  origin: 'http://localhost:4200',
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions));
 
 app.get('/info', function (req, res) {
     res.send('La purée c\'est cool!')
@@ -20,8 +24,6 @@ userRoutes(app);
 pictureRoutes(app);
 categoryRoutes(app);
 
-//#endregion
-
-var server = app.listen(8081, () => {
-    console.log("Example app listening at http://localhost:8081/info")
- })
+app.listen(config.appPort, () => {
+    console.log("Example app listening at http://localhost:"+config.appPort+"/info")
+ });

@@ -11,6 +11,61 @@
 
 .exit{
     position: absolute;
-    top:7px;
-    right:7px;
+    top: 13px;
+    right: 13px;
+}
+
+.exit img{
+    padding:0;
+    max-height: 30px;
+    max-width: 30px;
+}
+
+.exit img:hover{
+    cursor: pointer;
+}
+
+#display {
+    width: 100%;
+}
+
+#picture {
+    margin-left: 16px;
+    margin-right: 16px; 
+}
+
+#previous{
+    top:50%;
+    position: absolute;
+    max-width: 35px;
+    padding:0;
+    left: -40px;
+}
+
+#next{
+    top:50%;
+    position: absolute;
+    max-width: 35px;
+    padding:0;
+    right: -40px;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+
+.np-button:hover {
+    cursor: pointer;
+}
+
+.preview-container {
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.24), 0 6px 20px 0 rgba(0, 0, 0, 0.35);
+}
+
+.main-container {
+    position: relative;
+    background-color: rgba(42, 46, 51, 0.836);
 }

@@ -1,13 +1,20 @@
-<div class="preview container-fluid">
-  <div class="row">
-    <div class="col-lg-3">
-      <img [src]="currentPath" alt="image">
-    </div>
-    <div class="col-lg-9">
-      <button class="btn btn-success">Click ici pour acheter Vite c'est pas cher!</button>
+<div class="container-fluid main-container p-5">
+  <div class="row justify-content-center">
+    <div class="row col-8 m-0 p-0 preview-container">
+      <img src="../../assets/previous.png" id="previous" class="np-button" (click)="previous()">
+      <div id="picture" class="col-6 m-0 p-0" *ngIf="currentPicture.loaded">
+        <img [src]="currentPicture.src" alt="image" id="display" class="m-0 p-0">
+      </div>
+      <div *ngIf="!currentPicture.loaded" class="col-6">
+        <img src="../../assets/loading.gif">
+      </div>
+      <div class="col-6">
+        <p>{{currentPicture.description}}</p>
+      </div>
+      <img src="../../assets/previous.png" id="next" class="np-button" (click)="next()">
     </div>
   </div>
   <div class="exit">
-      <button class="btn btn-danger" (click)="hidePreview()">X</button>
-    </div>
+    <img src="../../assets/close.png" (click)="close()" />
+  </div>
 </div>

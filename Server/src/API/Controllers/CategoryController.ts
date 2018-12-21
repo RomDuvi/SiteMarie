@@ -1,52 +1,35 @@
-import { Category } from '../../Schemas/Category';
 import { Request, Response } from "express";
+import { Category } from '../../Client/Database/Category';
 import { ICategory } from '../../Interfaces/ICategory';
 
 export function getAllCategories(req: Request, res: Response){
-    return Category.find({}).populate('pictures').exec((err, categories: ICategory[]) =>{
-        if(err){
-            res.send(err);
-        }else{
-            res.json(categories);
-        }
-    });
+    Category.fetchAll({withRelated:['pictures']}).then((categories: ICategory[]) => {
+        res.json(categories);
+    }).catch(err => res.send(err));
 }
 
 export function getCategoryById(req: Request, res: Response){
-    return Category.findById(req.params.categoryId).populate('pictures').exec((err, category: ICategory)=>{
-        if(err){
-            res.send(err);
-        }else{
+    new Category({'id':req.params.categoryId})
+        .fetch()
+        .then((category: ICategory) => {
             res.json(category);
-        }
-    });
+        }).catch(err => res.send(err));
 }
 
 export function saveCategory(req: Request, res: Response){
-    var category = new Category(req.body);
-    let now = new Date();
-
-    if(!category.creationDate){
-        category.creationDate = now;
-    }
-
-    category.updateDate = now;
-    category.save((err, category:ICategory)=>{
-        if(err){
-            res.send(err);
-        }else{
+    let category: ICategory = req.body;
+    delete category.pictures;
+    Category.forge(category)
+        .save()
+        .then((category: ICategory) => {
             res.json(category);
-        }
-    })
+        }).catch(err => res.send(err));
 }
 
-
-export function getCategoryByName(req: Request, res: Response){
-    Category.find({name:req.params.categoryName}).populate('pictures').exec((err, category: ICategory) => {
-        if(err){
-            res.send(err);
-        }else{
-            res.json(category);
-        }
-    });
+export function getCategoryWithParams(req: Request, res: Response){
+    new Category(req.body)
+        .fetch()
+        .then((categories: ICategory[]) => {
+            res.json(categories);
+        }).catch(err=>res.send(err));
 }

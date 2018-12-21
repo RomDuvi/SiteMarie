@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { PictureService } from '../app/services/picture.service';
+import { Picture } from 'src/models/picture.model';
 
 @Component({
   selector: 'app-card',
@@ -6,15 +8,19 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./card.component.css']
 })
 export class CardComponent implements OnInit {
-  @Input() path: string;
-  @Input() name: string;
+  picture: Picture;
+  @Input() index = 0;
+  @Input() id: string;
 
-  constructor() {
+  constructor(private pictureService: PictureService) {
 
   }
 
   ngOnInit() {
-
+    this.loadPicture();
   }
 
+  loadPicture() {
+    this.picture = this.pictureService.getPictureFile(this.id);
+  }
 }
