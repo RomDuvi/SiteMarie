@@ -19,7 +19,7 @@
     "@types/lodash": "^4.14.119",
     "@types/sequelize": "^4.27.33",
     "base64-arraybuffer": "^0.1.5",
-    "bcrypt": "^3.0.2",
+    "bcrypt-nodejs": "0.0.3",
     "bookshelf": "^0.14.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",

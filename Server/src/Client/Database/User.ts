@@ -1,8 +1,8 @@
 import { context } from '../context';
 import { Guid } from 'guid-typescript';
-import { IUser } from '../../Interfaces/IUser';
+import * as bc from 'bcrypt-nodejs';
 var Promise  = require('bluebird');
-var bcrypt = Promise.promisifyAll(require('bcrypt'));
+var bcrypt = Promise.promisifyAll(bc);
 
 export const User = context.Model.extend({
     tableName: 'users',

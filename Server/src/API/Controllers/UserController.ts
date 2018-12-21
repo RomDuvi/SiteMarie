@@ -2,7 +2,9 @@ import { IUser } from '../../Interfaces/IUser';
 import { Request, Response } from 'express';
 import { User } from '../../Client/Database/User';
 var Promise  = require('bluebird');
-var bcrypt = Promise.promisifyAll(require('bcrypt'));
+import * as bc from 'bcrypt-nodejs';
+
+var bcrypt = Promise.promisifyAll(bc);
 
 export function getAllUsers(req: Request, res: Response){
     User.fetchAll().then((users: IUser[])=>{
