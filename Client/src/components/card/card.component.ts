@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PictureService } from '../app/services/picture.service';
-import { Picture } from 'src/models/picture.model';
+import { Picture } from '../../models/picture.model';
 
 @Component({
   selector: 'app-card',

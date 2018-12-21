@@ -1,9 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Picture } from 'src/models/picture.model';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { PictureService } from '../app/services/picture.service';
-import saveAs from 'file-saver';
-
 @Component({
   selector: 'app-add-picture',
   templateUrl: './add-picture.component.html',

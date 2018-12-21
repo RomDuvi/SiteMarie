@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PictureService } from '../app/services/picture.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Picture } from 'src/models/picture.model';
 import { Observable } from 'rxjs';
+import { Picture } from '../../models/picture.model';
 @Component({
   selector: 'app-preview',
   templateUrl: './preview.component.html',

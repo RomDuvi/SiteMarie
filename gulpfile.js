@@ -1,7 +1,7 @@
 var gulp = require("gulp");
 var ts = require("gulp-typescript");
 var serverTsProject = ts.createProject("./Server/tsconfig.json");
-var clientTsProject = ts.createProject("./SiteMarie/tsconfig.json");
+var clientTsProject = ts.createProject("./Client/src/tsconfig.app.json");
 
 gulp.task("default",()=>{
     buildServer();
@@ -13,7 +13,8 @@ gulp.task("server",()=>{
 });
 
 gulp.task("client",()=>{
-    return buildClient();
+    buildClient();
+    buildAssets();
 });
 
 function buildServer(){
@@ -21,5 +22,9 @@ function buildServer(){
 }
 
 function buildClient(){
-    return clientTsProject.src().pipe(clientTsProject()).js.pipe(gulp.dest("./SiteMarie/dist"));
+    return clientTsProject.src().pipe(clientTsProject()).js.pipe(gulp.dest("./Client/dist"));
+}
+
+function buildAssets(){
+    return gulp.src('Client/src/assets/*.*').pipe(gulp.dest("./Client/dist/assets"));
 }

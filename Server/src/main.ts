@@ -4,7 +4,6 @@ import * as express from 'express';
 import { Config } from './Client/config';
 export const app = express();
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
 const config = new Config();
 
 
