@@ -5,11 +5,17 @@ import { Config } from './Client/config';
 export const app = express();
 const cors = require('cors');
 const config = new Config();
-
+const corsWhitelist = ['http://localhost:4200', 'https://rizdelhuile.rduvi.com'];
 
 app.use(bodyParser.json({limit:'50mb'}));
 const corsOptions = {
-  origin: 'http://localhost:4200',
+  origin: function (origin, callback) {
+    if (corsWhitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   optionsSuccessStatus: 200
 }
 app.use(cors(corsOptions));
