@@ -1,8 +1,7 @@
 import { context } from '../context';
 import { Guid } from 'guid-typescript';
-import * as bc from 'bcrypt-nodejs';
+import * as bcrypt from 'bcrypt-nodejs';
 var Promise  = require('bluebird');
-var bcrypt = Promise.promisifyAll(bc);
 
 export const User = context.Model.extend({
     tableName: 'users',
@@ -19,8 +18,7 @@ export const User = context.Model.extend({
                 if(!user){
                   throw new Error('Invalid user');
                 }
-                return bcrypt.compare(password, user.get('password'))
-                      .then((res: any)=>{
+                return bcrypt.compare(password, user.get('password'), (err:any, res: any)=>{
                         if(!res) throw new Error('Invalid password');
               });
       });

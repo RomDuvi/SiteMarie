@@ -2,9 +2,7 @@ import { IUser } from '../../Interfaces/IUser';
 import { Request, Response } from 'express';
 import { User } from '../../Client/Database/User';
 var Promise  = require('bluebird');
-import * as bc from 'bcrypt-nodejs';
-
-var bcrypt = Promise.promisifyAll(bc);
+import * as bcrypt from 'bcrypt-nodejs';
 
 export function getAllUsers(req: Request, res: Response){
     User.fetchAll().then((users: IUser[])=>{
@@ -23,7 +21,7 @@ export function getUserById(req: Request, res: Response){
 export function saveUser(req: Request, res: Response){
     var user: IUser = req.body;
     user.username = user.username.trim();
-    bcrypt.hash(user.password, 10).then((hash: any, err: any) => {
+    bcrypt.hash(user.password, bcrypt.genSaltSync(10), null, (err: any, hash: any) => {
         if(err) throw new Error(err.message);
         user.password = hash;
         User.forge(user)
