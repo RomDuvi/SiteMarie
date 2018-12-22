@@ -9,7 +9,7 @@ gulp.task('clean', clean);
 gulp.task('config', copyConfig);
 
 function clean() {
-    var paths = del.sync(['Server/dist/**', '!Server/dist', '!Server/dist/config.json']);
+    var paths = del.sync(['Server/dist/**', '!Server/dist', '!Server/dist/config.json', '!Server/dist/public', '!Server/dist/tmp', '!Server/dist/public/**', '!Server/dist/tmp/**']);
     if(paths.length > 0){
         console.log("Deleted files \n");
         paths.forEach(path => {
