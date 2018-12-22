@@ -26,5 +26,5 @@ function buildServer(){
 }
 
 function copyConfig(){
-    return gulp.src('./Server/src/config.sample.json').pipe(gulp.dest('./Server/dist/server'));
+    return gulp.src('./Server/src/config.sample.json').pipe(gulp.dest('./Server/dist'));
 }
