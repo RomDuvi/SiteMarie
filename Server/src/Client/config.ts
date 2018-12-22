@@ -1,12 +1,12 @@
 const config = require('../../src/config.json');
 
 export class Config {
-    public appPort;
-    public picturePath;
-    public jwtSecret;
-    public databaseUsername;
-    public databasePassword;
-    public databaseName;
+    public appPort: string;
+    public picturePath: string;
+    public jwtSecret: string;
+    public databaseUsername: string;
+    public databasePassword: string;
+    public databaseName: string;
 
     constructor() {
         this.appPort = config.appPort;

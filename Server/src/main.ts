@@ -9,7 +9,7 @@ const corsWhitelist = ['http://localhost:4200', 'https://rizdelhuile.rduvi.com']
 
 app.use(bodyParser.json({limit:'50mb'}));
 const corsOptions = {
-  origin: function (origin, callback) {
+    origin: function (origin: string, callback: any) {
     if (corsWhitelist.indexOf(origin) !== -1) {
       callback(null, true)
     } else {

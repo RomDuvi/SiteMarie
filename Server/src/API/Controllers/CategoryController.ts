@@ -5,7 +5,7 @@ import { ICategory } from '../../Interfaces/ICategory';
 export function getAllCategories(req: Request, res: Response){
     Category.fetchAll({withRelated:['pictures']}).then((categories: ICategory[]) => {
         res.json(categories);
-    }).catch(err => res.send(err));
+    }).catch((err: any) => res.send(err));
 }
 
 export function getCategoryById(req: Request, res: Response){
@@ -13,7 +13,7 @@ export function getCategoryById(req: Request, res: Response){
         .fetch()
         .then((category: ICategory) => {
             res.json(category);
-        }).catch(err => res.send(err));
+        }).catch((err: any) => res.send(err));
 }
 
 export function saveCategory(req: Request, res: Response){
@@ -23,7 +23,7 @@ export function saveCategory(req: Request, res: Response){
         .save()
         .then((category: ICategory) => {
             res.json(category);
-        }).catch(err => res.send(err));
+        }).catch((err: any) => res.send(err));
 }
 
 export function getCategoryWithParams(req: Request, res: Response){
@@ -31,5 +31,5 @@ export function getCategoryWithParams(req: Request, res: Response){
         .fetch()
         .then((categories: ICategory[]) => {
             res.json(categories);
-        }).catch(err=>res.send(err));
+        }).catch((err: any) => res.send(err));
 }

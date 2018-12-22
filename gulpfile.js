@@ -19,8 +19,6 @@ function clean() {
 }
 
 function buildServer(){
-    clean();
-    copyConfig();
     return serverTsProject.src()
         .pipe(serverTsProject())
         .js

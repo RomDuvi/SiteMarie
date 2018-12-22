@@ -11,9 +11,9 @@ const fs = require('fs');
 const config = new Config();
 
 export function getAllPictures(req: Request, res: Response){
-    Picture.fetchAll({withRelated:['categories']}).then((pictures) => {
+    Picture.fetchAll({withRelated:['categories']}).then((pictures: any) => {
         res.json(pictures);
-    }).catch(err => res.send(err));
+    }).catch((err: any) => res.send(err));
 }
 
 export function getPictureById(req: Request, res: Response){
@@ -21,7 +21,7 @@ export function getPictureById(req: Request, res: Response){
         .fetch()
         .then((picture: IPicture) => {
             res.json(picture);
-        }).catch(err => res.send(err));
+        }).catch((err: any) => res.send(err));
 }
 
 export function savePicture(req: Request, res: Response){
@@ -30,7 +30,7 @@ export function savePicture(req: Request, res: Response){
     const path = config.picturePath + picture.fileName; //Remove space and special char 
     picture.path = path;
 
-    fs.writeFile(path, picture.file, 'binary', (err)=>{
+    fs.writeFile(path, picture.file, 'binary', (err: any)=>{
         if(err) throw new Error(err);
     });
     delete picture.fileName;
@@ -38,27 +38,27 @@ export function savePicture(req: Request, res: Response){
     //Save picture in database
     Picture.forge(attributes)
         .save()
-        .tap(picture => Promise.map(categories, (category: ICategory) => { 
+        .tap((picture: any) => Promise.map(categories, (category: ICategory) => { 
             delete category.pictures;
             picture.related('categories').create(category);
         }))
         .then((picture: IPicture) => {
             res.json(picture);
-        }).catch(err => res.send(err));
+        }).catch((err: any) => res.send(err));
 }
 
 export function getPictureFile(req: Request, res: Response){
     var pictureId = req.params.pictureId;
     new Picture({'id': pictureId})
         .fetch()
-        .then((picture) => {
-            fs.readFile(picture.get('path'), (err, data)=>{
+        .then((picture: any) => {
+            fs.readFile(picture.get('path'), (err: any, data: any)=>{
                 if(err) throw new Error(err);
                 res.contentType(picture.get('type'));
                 res.send({'type':picture.get('type'),'file':encode(data)});
             })
         })
-        .catch(err => res.send(err));
+        .catch((err: any) => res.send(err));
 }
 
 export function getPictureWithParams(req: Request, res: Response){
@@ -66,5 +66,5 @@ export function getPictureWithParams(req: Request, res: Response){
         .fetch()
         .then((picture: IPicture) => {
             res.json(picture);
-        }).catch(err=>res.send(err));
+        }).catch((err: any)=>res.send(err));
 }

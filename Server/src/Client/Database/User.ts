@@ -15,12 +15,12 @@ export const User = context.Model.extend({
       }
       return new User({username: username.trim()})
               .fetch()
-              .tap(function(user){
+              .tap(function(user: any){
                 if(!user){
                   throw new Error('Invalid user');
                 }
                 return bcrypt.compare(password, user.get('password'))
-                      .then((res)=>{
+                      .then((res: any)=>{
                         if(!res) throw new Error('Invalid password');
               });
       });
