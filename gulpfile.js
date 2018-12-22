@@ -9,7 +9,7 @@ gulp.task('clean', clean);
 gulp.task('config', copyConfig);
 
 function clean() {
-    var paths = del.sync(['./Server/dist/**']);
+    var paths = del.sync(['Server/dist/**', '!Server/dist', '!Server/dist/config.json']);
     if(paths.length > 0){
         console.log("Deleted files \n");
         paths.forEach(path => {
@@ -22,7 +22,7 @@ function buildServer(){
     return serverTsProject.src()
         .pipe(serverTsProject())
         .js
-        .pipe(gulp.dest("./Server/dist/server"));
+        .pipe(gulp.dest("./Server/dist"));
 }
 
 function copyConfig(){
