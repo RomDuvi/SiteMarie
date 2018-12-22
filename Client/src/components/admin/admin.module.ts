@@ -5,7 +5,6 @@ import { AdminComponent } from './admin.component';
 @NgModule({
   imports: [
     CommonModule
-  ],
-  declarations: [AdminComponent]
+  ]
 })
 export class AdminModule { }

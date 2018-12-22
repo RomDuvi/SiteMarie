@@ -5,7 +5,6 @@ import { PreviewComponent } from './preview.component';
 @NgModule({
   imports: [
     CommonModule
-  ],
-  declarations: [PreviewComponent]
+  ]
 })
 export class PreviewModule { }
