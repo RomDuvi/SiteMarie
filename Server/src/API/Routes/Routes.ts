@@ -2,7 +2,6 @@ import {Express} from "express";
 import { getAllUsers, getUserById, saveUser, login } from '../Controllers/UserController';
 import { getAllPictures, savePicture, getPictureById, getPictureWithParams, getPictureFile } from '../Controllers/PictureController';
 import { getAllCategories, saveCategory, getCategoryById, getCategoryWithParams } from '../Controllers/CategoryController';
-import { cors, corsOptions } from '../../main';
 
 export var userRoutes = (app: Express) => {
     app.route('/users')
@@ -17,7 +16,7 @@ export var userRoutes = (app: Express) => {
 
 export var pictureRoutes = (app: Express) => {
     app.route('/pictures')
-        .get(getAllPictures, cors(corsOptions))
+        .get(getAllPictures)
         .post(savePicture)
         .put(savePicture);
     app.route('/pictures/:pictureId')
