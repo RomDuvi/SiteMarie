@@ -13,6 +13,7 @@ export const serverBasePath = __dirname;
 
 
 app.use(bodyParser.json({limit:'50mb'}));
+app.options(cors(corsOptions));
 app.use(cors(corsOptions));
 app.disable('etag');
 //#region Routes
