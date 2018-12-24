@@ -9,7 +9,7 @@ const corsOptions = {
   origin: "https://rizdelhuile.rduvi.com"
 };
 
-app.use(bodyParser.urlencoded({extended: true}));
+//app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json({limit:'50mb'}));
 
 app.use(cors(corsOptions));
@@ -17,6 +17,10 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
+});
+
+app.post('/', function(req, res, next) {
+ // Handle the post for this route
 });
 
 app.get('/info', function (req, res) {
