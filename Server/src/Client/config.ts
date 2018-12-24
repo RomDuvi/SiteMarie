@@ -7,6 +7,7 @@ export class Config {
     public databaseUsername: string;
     public databasePassword: string;
     public databaseName: string;
+    public clientPath: string;
 
     constructor() {
         this.appPort = config.appPort;
@@ -15,5 +16,6 @@ export class Config {
         this.databaseUsername = config.databaseUsername;
         this.databasePassword = config.databasePassword;
         this.databaseName = config.databaseName;
+        this.clientPath = config.clientPath;
     }
 }
