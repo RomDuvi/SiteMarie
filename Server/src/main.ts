@@ -6,10 +6,13 @@ export const app = express();
 const cors = require('cors');
 const config = new Config();
 const corsOptions = {
-  origin: 'https://rizdelhuile.rduvi.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: config.clientPath,
+  optionsSuccessStatus: 200 
 }
+export const serverBasePath = __dirname;
 
+
+app.use(bodyParser.json({limit:'50mb'}));
 app.use(cors(corsOptions));
 app.disable('etag');
 //#region Routes

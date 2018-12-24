@@ -5,7 +5,9 @@ import { Category } from '../../Client/Database/Category';
 import { ICategory } from '../../Interfaces/ICategory';
 import { Config } from '../../Client/config';
 import { encode } from 'base64-arraybuffer';
+import { serverBasePath } from '../../main';
 
+const path = require('path');
 var Promise  = require('bluebird');
 const fs = require('fs');
 const config = new Config();
@@ -27,10 +29,10 @@ export function getPictureById(req: Request, res: Response){
 export function savePicture(req: Request, res: Response){
     let { categories, ...attributes } = req.body;
     let picture: IPicture = attributes;
-    const path = config.picturePath + picture.fileName; //Remove space and special char 
-    picture.path = path;
+    const picturePath = path.join(serverBasePath, config.picturePath, picture.fileName); //Remove space and special char 
+    picture.path = picturePath;
 
-    fs.writeFile(path, picture.file, 'binary', (err: any)=>{
+    fs.writeFile(picturePath, picture.file, 'binary', (err: any)=>{
         if(err) throw new Error(err);
     });
     delete picture.fileName;
