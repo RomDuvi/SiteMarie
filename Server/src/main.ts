@@ -5,17 +5,16 @@ import { Config } from './Client/config';
 export const app = express();
 const cors = require('cors');
 const config = new Config();
-const corsOptions = {
-  origin: config.clientPath,
-  optionsSuccessStatus: 200 
-}
 export const serverBasePath = __dirname;
-
+const corsOptions = {
+    origin: config.clientPath,
+    optionsSuccessStatus: 200 
+}
 
 app.use(bodyParser.json({limit:'50mb'}));
-app.options(cors(corsOptions));
 app.use(cors(corsOptions));
-app.disable('etag');
+app.disable('etag'); //Remove chrome cache options for cors
+
 //#region Routes
 userRoutes(app);
 pictureRoutes(app);
