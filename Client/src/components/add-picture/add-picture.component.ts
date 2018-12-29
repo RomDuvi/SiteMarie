@@ -1,6 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { PictureService } from '../app/services/picture.service';
+import { isNumeric } from 'jquery';
+
+
 @Component({
   selector: 'app-add-picture',
   templateUrl: './add-picture.component.html',
@@ -12,10 +15,13 @@ export class AddPictureComponent implements OnInit {
   pictureForm: FormGroup;
   submitted = false;
   error;
+  progressValue;
+  progressMessage = '';
 
   constructor(private fb: FormBuilder, private pictureService: PictureService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.progressValue = 0;
     this.pictureForm = this.fb.group({
         displayName: ['', Validators.required],
         description: ['', Validators.required],
@@ -33,7 +39,19 @@ export class AddPictureComponent implements OnInit {
     if (this.pictureForm.invalid) {
       return;
     }
-    this.pictureService.addPicture(this.pictureForm.value);
+    this.pictureService.addPicture(this.pictureForm.value, (message: any) => this.onLoadEvent(message));
+  }
+
+  onLoadEvent(message: any) {
+    if (isNumeric(message)) {
+      this.progressValue = +message;
+    }
+    this.progressMessage = message;
+    this.cd.detectChanges();
+  }
+
+  isNumeric(num: any) {
+    return !isNaN(num);
   }
 
   onFileChange(event) {

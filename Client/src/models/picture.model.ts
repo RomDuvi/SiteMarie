@@ -12,4 +12,5 @@ export class Picture extends BaseModel {
     file: any;
     src: SafeUrl;
     loaded = false;
+    displayName: string;
 }

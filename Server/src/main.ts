@@ -6,6 +6,7 @@ export const app = express();
 const cors = require('cors');
 const config = new Config();
 export const serverBasePath = __dirname;
+
 const corsOptions = {
     origin: config.clientPath,
     optionsSuccessStatus: 200 

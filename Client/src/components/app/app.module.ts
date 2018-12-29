@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Component } from '@angular/core';
+import { NgModule, Component, ErrorHandler } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NavModule } from '../nav/nav.module';
@@ -17,6 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthGuard } from './services/Guard/authGuard';
 import { AuthService } from './services/Guard/auth.service';
 import { AdminComponent } from '../admin/admin.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -43,6 +44,7 @@ const appRoutes: Routes = [
     NavModule,
     BodyModule,
     FormsModule,
+    NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(

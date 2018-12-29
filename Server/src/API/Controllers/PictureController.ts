@@ -37,10 +37,11 @@ export function savePicture(req: Request, res: Response){
     });
     delete picture.fileName;
     delete picture.file;
+
     //Save picture in database
     Picture.forge(attributes)
         .save()
-        .tap((picture: any) => Promise.map(categories, (category: ICategory) => { 
+        .tap((picture: any) => Promise.map(categories, (category: ICategory) => {
             delete category.pictures;
             picture.related('categories').create(category);
         }))

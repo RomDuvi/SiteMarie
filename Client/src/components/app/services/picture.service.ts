@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Picture } from '../../../models/picture.model';
-import { BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpErrorResponse } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConfigService } from './config/config.service';
+import { map, tap, last, catchError } from 'rxjs/operators';
+import { Category } from 'src/models/category.model';
 
 @Injectable()
 export class PictureService extends ConfigService {
@@ -25,11 +27,20 @@ export class PictureService extends ConfigService {
         this._pictures.next(Object.assign({}, this.dataStore).pictures);
     }
 
-    addPicture(picture: Picture) {
-        this.http.post<Picture>(this.apiUrl, picture, this.httpOptions).subscribe(data => {
-            this.dataStore.pictures.push(data);
-            this.assign();
-        });
+    addPicture(picture: Picture, progressCallback: any) {
+        if (!picture.categories) {
+            picture.categories = [];
+        }
+        const req = new HttpRequest('POST', this.apiUrl, picture, { reportProgress: true});
+        this.http.request(req).pipe(
+            map(event => this.getEventMessage(event, picture.displayName)),
+            tap(message => progressCallback(message)),
+            last(),
+            catchError((error: HttpErrorResponse) => {
+                    console.log(error);
+                    return throwError(error);
+                })
+          ).subscribe((x: any) => { console.log(x); } );
     }
 
     getPictures(callback?) {
@@ -68,4 +79,24 @@ export class PictureService extends ConfigService {
     }
 
     get pictures() { return this._pictures.asObservable(); }
+
+
+    private getEventMessage(event: HttpEvent<any>, fileName: string): any {
+        switch (event.type) {
+          case HttpEventType.Sent:
+            return `Uploading "${fileName}"`;
+
+          case HttpEventType.UploadProgress:
+            // Compute and show the % done:
+            const percentDone = Math.round(100 * event.loaded / event.total);
+            return percentDone;
+
+          case HttpEventType.Response:
+            this.dataStore.pictures.push(event.body);
+            return `"${fileName}" was completely uploaded!`;
+
+          default:
+            return `"${fileName}" surprising upload event: ${event.type}.`;
+        }
+      }
 }

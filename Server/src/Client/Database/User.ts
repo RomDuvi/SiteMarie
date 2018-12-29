@@ -1,12 +1,11 @@
 import { context } from '../context';
-import { Guid } from 'guid-typescript';
 import * as bcrypt from 'bcrypt-nodejs';
 var Promise  = require('bluebird');
 
 export const User = context.Model.extend({
     tableName: 'users',
     hasTimestamps: ['createdAt', 'updatedAt'],
-    defaults: {id: Guid.raw()},
+    idAttribute: 'id'
   }, {
     login: Promise.method(function(username: string, password: string) {
       if(!username || !password){
