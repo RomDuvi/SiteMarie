@@ -11,6 +11,7 @@ export class CardComponent implements OnInit {
   picture: Picture;
   @Input() index = 0;
   @Input() id: string;
+  @Input() isAdmin: boolean;
 
   constructor(private pictureService: PictureService) {
 
@@ -22,5 +23,13 @@ export class CardComponent implements OnInit {
 
   loadPicture() {
     this.picture = this.pictureService.getPictureFile(this.id);
+  }
+
+  deletePicture() {
+    
+  }
+
+  editPicture() {
+
   }
 }

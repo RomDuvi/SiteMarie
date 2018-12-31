@@ -5,7 +5,6 @@ import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpErrorResponse } 
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConfigService } from './config/config.service';
 import { map, tap, last, catchError } from 'rxjs/operators';
-import { Category } from 'src/models/category.model';
 
 @Injectable()
 export class PictureService extends ConfigService {
@@ -27,7 +26,7 @@ export class PictureService extends ConfigService {
         this._pictures.next(Object.assign({}, this.dataStore).pictures);
     }
 
-    addPicture(picture: Picture, progressCallback: any) {
+    addPicture(picture: Picture, progressCallback: any, lasCallback: any) {
         if (!picture.categories) {
             picture.categories = [];
         }
@@ -35,7 +34,7 @@ export class PictureService extends ConfigService {
         this.http.request(req).pipe(
             map(event => this.getEventMessage(event, picture.displayName)),
             tap(message => progressCallback(message)),
-            last(),
+            last(lasCallback()),
             catchError((error: HttpErrorResponse) => {
                     console.log(error);
                     return throwError(error);
@@ -93,6 +92,7 @@ export class PictureService extends ConfigService {
 
           case HttpEventType.Response:
             this.dataStore.pictures.push(event.body);
+            this.assign();
             return `"${fileName}" was completely uploaded!`;
 
           default:

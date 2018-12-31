@@ -1,15 +1,15 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { PictureService } from '../app/services/picture.service';
 import { isNumeric } from 'jquery';
+import { last } from '@angular/router/src/utils/collection';
 
 
 @Component({
   selector: 'app-add-picture',
   templateUrl: './add-picture.component.html',
   styleUrls: ['./add-picture.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [PictureService]
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddPictureComponent implements OnInit {
   pictureForm: FormGroup;
@@ -18,7 +18,7 @@ export class AddPictureComponent implements OnInit {
   progressValue;
   progressMessage = '';
 
-  constructor(private fb: FormBuilder, private pictureService: PictureService, private cd: ChangeDetectorRef) { }
+  constructor(private fb: FormBuilder, protected pictureService: PictureService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.progressValue = 0;
@@ -35,19 +35,25 @@ export class AddPictureComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.progressValue = 0;
     this.error = '';
     if (this.pictureForm.invalid) {
       return;
     }
-    this.pictureService.addPicture(this.pictureForm.value, (message: any) => this.onLoadEvent(message));
+    this.pictureService.addPicture(this.pictureForm.value, (message: any) => this.onLoadEvent(message), () => this.last());
   }
 
   onLoadEvent(message: any) {
+    this.submitted = false;
     if (isNumeric(message)) {
       this.progressValue = +message;
     }
     this.progressMessage = message;
     this.cd.detectChanges();
+  }
+
+  last() {
+    this.pictureForm.reset();
   }
 
   isNumeric(num: any) {

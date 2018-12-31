@@ -18,6 +18,9 @@ import { AuthGuard } from './services/Guard/authGuard';
 import { AuthService } from './services/Guard/auth.service';
 import { AdminComponent } from '../admin/admin.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faTrash, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -50,6 +53,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes
     ),
+    FontAwesomeModule
   ],
   providers: [
     AuthGuard,
@@ -57,4 +61,8 @@ const appRoutes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    library.add(faTrash, faPencilAlt);
+  }
+}

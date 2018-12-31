@@ -2,6 +2,7 @@
     transition: 0.2s;
     margin-bottom : 25px;
     border: none;
+    margin-top: 15px;
 }
 
 .card:hover {
@@ -22,4 +23,8 @@
 
 #loading{
     text-align: center;
+}
+
+.edit .btn {
+    margin-right: 2px; 
 }
