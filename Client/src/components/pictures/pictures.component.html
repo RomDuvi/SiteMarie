@@ -1,0 +1,7 @@
+<div class="container-fluid">
+  <div class="card-columns">
+    <div *ngFor="let picture of pictures | async; index as i;">
+      <app-card [index]="i" [id]="picture.id" (click)='displayPreview(i)'></app-card>
+    </div>
+  </div>
+</div>

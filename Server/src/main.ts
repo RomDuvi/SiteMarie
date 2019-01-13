@@ -16,6 +16,8 @@ app.use(bodyParser.json({limit:'50mb'}));
 app.use(cors(corsOptions));
 app.disable('etag'); //Remove chrome cache options for cors
 
+app.get('/info', () => {return "La purée c'est cool!"})
+
 //#region Routes
 userRoutes(app);
 pictureRoutes(app);

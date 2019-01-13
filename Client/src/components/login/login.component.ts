@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../app/services/Guard/auth.service';
+import { AuthService } from '../app/services/guard/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +22,9 @@ export class LoginComponent implements OnInit {
   constructor(protected authService: AuthService, private fb: FormBuilder, private router: Router) { }
 
   ngOnInit() {
+    if (this.authService.isAdminLogged()) {
+      this.router.navigate(['/admin']);
+    }
   }
 
   get f() { return this.loginForm.controls; }

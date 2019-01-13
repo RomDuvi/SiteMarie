@@ -8,26 +8,32 @@ import { BodyModule } from '../body/body.module';
 import { NavComponent } from '../nav/nav.component';
 import { CardComponent } from '../card/card.component';
 import { PreviewComponent } from '../preview/preview.component';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AddPictureComponent } from '../add-picture/add-picture.component';
+import { HttpClientModule } from '@angular/common/http';
+import { AddPictureComponent } from '../pictures/add-picture/add-picture.component';
 import { FooterComponent } from '../footer/footer.component';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from '../login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AuthGuard } from './services/Guard/authGuard';
-import { AuthService } from './services/Guard/auth.service';
+import { AuthGuard } from './services/guard/authGuard';
+import { AuthService } from './services/guard/auth.service';
 import { AdminComponent } from '../admin/admin.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTrash, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faPencilAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { CategoriesComponent } from '../categories/categories.component';
+import { AngularDraggableModule } from 'angular2-draggable';
+import { PicturesComponent } from '../pictures/pictures.component';
+import { AddCategoryComponent } from '../categories/add-category/add-category.component';
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
-  {path: 'pictures', component: BodyComponent},
+  {path: 'categories', component: CategoriesComponent},
   {path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
   {path: 'preview', component: PreviewComponent},
-  {path: '', redirectTo: '/pictures', pathMatch: 'full'},
+  {path: '', redirectTo: '/categories', pathMatch: 'full'},
+  {path: 'pictures/:categoryId', component: PicturesComponent}
 ];
 
 @NgModule({
@@ -40,9 +46,13 @@ const appRoutes: Routes = [
     AddPictureComponent,
     FooterComponent,
     LoginComponent,
-    AdminComponent
+    AdminComponent,
+    CategoriesComponent,
+    PicturesComponent,
+    AddCategoryComponent
   ],
   imports: [
+    NgMultiSelectDropDownModule.forRoot(),
     BrowserModule,
     NavModule,
     BodyModule,
@@ -50,10 +60,14 @@ const appRoutes: Routes = [
     NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
+    AngularDraggableModule,
     RouterModule.forRoot(
       appRoutes
     ),
     FontAwesomeModule
+  ],
+  entryComponents: [
+    AddCategoryComponent
   ],
   providers: [
     AuthGuard,
@@ -63,6 +77,6 @@ const appRoutes: Routes = [
 })
 export class AppModule {
   constructor() {
-    library.add(faTrash, faPencilAlt);
+    library.add(faTrash, faPencilAlt, faPlusCircle);
   }
 }

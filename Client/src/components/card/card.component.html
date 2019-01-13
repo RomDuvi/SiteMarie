@@ -1,15 +1,13 @@
 <div class="card">
-  <div class="card-header" *ngIf="isAdmin" >
-    <div class="edit text-right">
-      <div class="btn btn-info" (click)="editPicture"><fa-icon icon="pencil-alt"></fa-icon></div>
-      <div class="btn btn-danger" (click)="deletePicture"><fa-icon icon="trash"></fa-icon></div>
+  <div *ngIf="picture.loaded" class="card-img-div">
+    <div *ngIf="isAdmin">
+      <div class="edit">
+        <button class="btn btn-info" (click)="editPicture($event)"><fa-icon icon="pencil-alt"></fa-icon></button><br/>
+        <button class="btn btn-danger" (click)="deletePicture($event)"><fa-icon icon="trash"></fa-icon></button>
+      </div>
     </div>
-  </div>
-  <div *ngIf="picture.loaded" >
     <img class="card-img-top" [alt]="picture.displayName" [src]="picture.src" />
-    <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
-      <h5 class="card-title">{{picture.displayName}}</h5>
-    </div>
+    <h5 class="card-title">{{picture.displayName}}</h5>
   </div>
   <div *ngIf="!picture.loaded" id="loading" class="align-middle">
     <img src="../../assets/loading.gif" />

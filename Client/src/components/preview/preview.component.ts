@@ -49,6 +49,6 @@ export class PreviewComponent implements OnInit {
   }
 
   close() {
-    this.router.navigateByUrl('/pictures');
+    window.history.back();
   }
 }

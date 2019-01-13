@@ -14,4 +14,5 @@ var params = {
 
 var knex = require('knex')(params);
 
-export const context = require('bookshelf')(knex);
+var cascadeDelete = require('bookshelf-cascade-delete');
+export const context = require('bookshelf')(knex).plugin(cascadeDelete);

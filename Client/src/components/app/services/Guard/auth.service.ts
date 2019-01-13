@@ -19,6 +19,13 @@ export class AuthService extends ConfigService {
             }));
     }
 
+    isAdminLogged(): boolean {
+        if (localStorage.getItem('currentUser') === null) {
+            return false;
+        }
+        return JSON.parse(localStorage.getItem('currentUser')).isAdmin;
+    }
+
     logout() {
         localStorage.removeItem('currentUser');
     }

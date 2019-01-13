@@ -1,8 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { PictureService } from '../app/services/picture.service';
+import { PictureService } from '../../app/services/picture.service';
 import { isNumeric } from 'jquery';
-import { last } from '@angular/router/src/utils/collection';
+import { Category } from 'src/models/category.model';
+import { CategoryService } from '../../app/services/category.service';
 
 
 @Component({
@@ -17,17 +18,34 @@ export class AddPictureComponent implements OnInit {
   error;
   progressValue;
   progressMessage = '';
+  categories: Category[];
+  dropDownCategories: Category[];
+  dropDownSettings = {
+    singleSelection: false,
+    idField: 'id',
+    textField: 'name',
+    enableCheckAll: false,
+    allowSearchFilter: true
+  };
 
-  constructor(private fb: FormBuilder, protected pictureService: PictureService, private cd: ChangeDetectorRef) { }
+  constructor(private fb: FormBuilder,
+      protected pictureService: PictureService,
+      protected categoryService: CategoryService,
+      private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.categories = [];
     this.progressValue = 0;
     this.pictureForm = this.fb.group({
-        displayName: ['', Validators.required],
-        description: ['', Validators.required],
-        file: ['', Validators.required],
-        fileName: [''],
-        type: ['']
+      displayName: ['', Validators.required],
+      description: ['', Validators.required],
+      categories: this.categories,
+      file: ['', Validators.required],
+      fileName: [''],
+      type: ['']
+    });
+    this.categoryService.getCategories().subscribe(data => {
+      this.dropDownCategories = data.filter(cat => cat.id > 1);
     });
   }
 
@@ -76,5 +94,12 @@ export class AddPictureComponent implements OnInit {
         this.cd.markForCheck();
       };
     }
+  }
+
+  onCategorySelect(item: any) {
+    this.categories.push(item);
+  }
+  onCategoryAll(items: any) {
+    this.categories = this.dropDownCategories;
   }
 }

@@ -1,7 +1,7 @@
 import {Express} from "express";
 import { getAllUsers, getUserById, saveUser, login } from '../Controllers/UserController';
-import { getAllPictures, savePicture, getPictureById, getPictureWithParams, getPictureFile } from '../Controllers/PictureController';
-import { getAllCategories, saveCategory, getCategoryById, getCategoryWithParams } from '../Controllers/CategoryController';
+import { getAllPictures, savePicture, getPictureById, getPictureFile, deletePicture } from '../Controllers/PictureController';
+import { getAllCategories, saveCategory, getCategoryById, deleteCategory } from '../Controllers/CategoryController';
 
 export var userRoutes = (app: Express) => {
     app.route('/users')
@@ -20,9 +20,11 @@ export var pictureRoutes = (app: Express) => {
         .post(savePicture)
         .put(savePicture);
     app.route('/pictures/:pictureId')
-        .get(getPictureById); 
+        .get(getPictureById);
     app.route('/pictures/file/:pictureId')
         .get(getPictureFile);
+    app.route('/pictures/delete')
+        .post(deletePicture);
 }
 
 export var categoryRoutes = (app: Express) => {
@@ -32,5 +34,7 @@ export var categoryRoutes = (app: Express) => {
         .put(saveCategory);
     app.route('/categories/:categoryId')
         .get(getCategoryById);
+    app.route('/categories/delete')
+        .post(deleteCategory);
 
 }

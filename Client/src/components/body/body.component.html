@@ -1,7 +1,3 @@
 <div class="body container-fluid">
-  <div class="card-columns">
-    <div *ngFor="let picture of pictures | async; index as i;">
-      <app-card [index]="i" [id]="picture.id" (click)="displayPreview(i)" [isAdmin]="isAdmin"></app-card>
-    </div>
-  </div>
+  <app-categories></app-categories>
 </div>

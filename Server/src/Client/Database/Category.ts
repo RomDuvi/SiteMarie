@@ -9,4 +9,6 @@ export const Category = context.Model.extend({
     pictures: function(){
       return this.belongsToMany(Picture).through(PicturesCategories);
     }
+  },{
+    dependents: ['pictures']
   });

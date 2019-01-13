@@ -33,3 +33,20 @@ export function getCategoryWithParams(req: Request, res: Response){
             res.json(categories);
         }).catch((err: any) => res.send(err));
 }
+
+export function deleteCategory(req: Request, res: Response){
+    let category = req.body;
+    Category.forge({id: category.id})
+            .fetch()
+            .then((category: any) => {
+                if(!category) {
+                    throw new Error('Delete category - no category found');
+                }
+                category.destroy();
+                res.status(200);
+                res.json(category);
+            }).catch((err:any) => {
+                res.status(500);
+                res.send(err);
+            });
+}

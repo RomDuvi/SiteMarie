@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4 p-2" *ngFor="let category of categories; index as i">
+      <div class="card category" (click)="displayCategory(category.id)" >
+        <div *ngIf="isAdmin">
+          <div class="edit">
+            <button class="btn btn-info" (click)="editCategory($event)"><fa-icon icon="pencil-alt"></fa-icon></button>
+            <button class="btn btn-danger" (click)="deleteCategory($event, i)"><fa-icon icon="trash"></fa-icon></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title text-center">{{category.name}}</h5>
+          <p class="card-text text-center">{{category.description}}</p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="isAdmin" class="col-lg-4 p-2">
+      <div class="card border-info category" (click)="open(content)">
+        <div class="card-body text-info">
+          <h5 class="card-title text-center">Add Category</h5>
+          <div class='text-center'>
+            <fa-icon icon="plus-circle" class="fa-2x"></fa-icon>
+          </div>
+          <p class="card-text text-center">Click to add a new category</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,6 @@
 import { IUser } from '../../Interfaces/IUser';
 import { Request, Response } from 'express';
 import { User } from '../../Client/Database/User';
-var Promise  = require('bluebird');
 import * as bcrypt from 'bcrypt-nodejs';
 
 export function getAllUsers(req: Request, res: Response){

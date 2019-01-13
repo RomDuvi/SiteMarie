@@ -42,7 +42,7 @@ export class PictureService extends ConfigService {
           ).subscribe((x: any) => { console.log(x); } );
     }
 
-    getPictures(callback?) {
+    getPictures(callback?, categoryId?) {
         if (this.dataStore.pictures.length > 0) {
             this.assign();
             if (callback) {
@@ -52,7 +52,14 @@ export class PictureService extends ConfigService {
         }
         this.http.get<Picture[]>(this.apiUrl, this.httpOptions)
                 .subscribe(data => {
-                    this.dataStore.pictures = data;
+                    if (categoryId) {
+                        this.dataStore.pictures = data.filter(pic => {
+                            const cats = pic.categories.filter(cat => cat.id === +categoryId);
+                            return cats.length > 0;
+                        });
+                    } else {
+                        this.dataStore.pictures = data;
+                    }
                     this.assign();
                     if (callback) {
                         callback();
@@ -60,7 +67,7 @@ export class PictureService extends ConfigService {
                 }, err => {throw new Error(err); });
     }
 
-    getPictureFile(pictureId: string): Picture {
+    getPictureFile(pictureId: number): Picture {
         const picture = this.dataStore.pictures.find(pic => pic.id === pictureId);
         if (picture.src) {
             return picture;
@@ -78,6 +85,20 @@ export class PictureService extends ConfigService {
     }
 
     get pictures() { return this._pictures.asObservable(); }
+
+    deletePicture(picture: Picture) {
+        this.http.post(this.apiUrl + '/delete', picture, this.httpOptions).subscribe((data: Picture) => {
+            const index = this.dataStore.pictures.indexOf(data);
+            this.dataStore.pictures.splice(index, 1);
+        }, err => {throw new Error(err); });
+    }
+
+    updatePicture(picture: Picture) {
+        this.http.put(this.apiUrl, picture, this.httpOptions).subscribe((data: Picture) => {
+            const index = this.dataStore.pictures.indexOf(data);
+            this.dataStore.pictures[index] = data;
+        }, err => { throw new Error(err); });
+    }
 
 
     private getEventMessage(event: HttpEvent<any>, fileName: string): any {
