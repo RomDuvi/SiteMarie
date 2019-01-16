@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../app/services/guard/auth.service';
 import { AddCategoryComponent } from './add-category/add-category.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastGeneratorService } from '../app/services/toastGenerator.service';
 
 @Component({
   selector: 'app-categories',
@@ -16,10 +17,13 @@ export class CategoriesComponent implements OnInit {
   categories: Category[];
   isAdmin = false;
 
-  constructor(protected categoryService: CategoryService,
+  constructor(
+    protected categoryService: CategoryService,
     private router: Router,
     private auth: AuthService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private toast: ToastGeneratorService
+  ) { }
 
   ngOnInit() {
     this.isAdmin = this.auth.isAdminLogged();
@@ -47,6 +51,7 @@ export class CategoriesComponent implements OnInit {
     }
     this.categoryService.deleteCategory(this.categories[index]).subscribe(data => {
       this.categories.splice(index, 1);
+      this.toast.toastSucess('Delete category', `The category ${data.name} has been deleted`);
     });
   }
 

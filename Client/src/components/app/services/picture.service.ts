@@ -5,6 +5,7 @@ import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpErrorResponse } 
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConfigService } from './config/config.service';
 import { map, tap, last, catchError } from 'rxjs/operators';
+import { ToastGeneratorService } from './toastGenerator.service';
 
 @Injectable()
 export class PictureService extends ConfigService {
@@ -15,7 +16,11 @@ export class PictureService extends ConfigService {
     };
 
     error;
-    constructor(protected http: HttpClient, private sanitizer: DomSanitizer) {
+    constructor(
+        protected http: HttpClient,
+        private sanitizer: DomSanitizer,
+        private toast: ToastGeneratorService
+    ) {
         super();
         this.apiUrl = this.config.baseUrl + this.config.pictureUrl;
         this.dataStore = { pictures: [] };
@@ -34,12 +39,8 @@ export class PictureService extends ConfigService {
         this.http.request(req).pipe(
             map(event => this.getEventMessage(event, picture.displayName)),
             tap(message => progressCallback(message)),
-            last(lasCallback()),
-            catchError((error: HttpErrorResponse) => {
-                    console.log(error);
-                    return throwError(error);
-                })
-          ).subscribe((x: any) => { console.log(x); } );
+            last(lasCallback())
+          ).subscribe((x: any) => { this.toast.toastSucess('Picture Created', `The picture ${x.displayName} has been created`); } );
     }
 
     getPictures(callback?, categoryId?) {
@@ -90,14 +91,16 @@ export class PictureService extends ConfigService {
         this.http.post(this.apiUrl + '/delete', picture, this.httpOptions).subscribe((data: Picture) => {
             const index = this.dataStore.pictures.indexOf(data);
             this.dataStore.pictures.splice(index, 1);
-        }, err => {throw new Error(err); });
+            this.toast.toastSucess('Picture deleted', `The picture ${data.displayName} has bean deleted`);
+        });
     }
 
     updatePicture(picture: Picture) {
         this.http.put(this.apiUrl, picture, this.httpOptions).subscribe((data: Picture) => {
             const index = this.dataStore.pictures.indexOf(data);
             this.dataStore.pictures[index] = data;
-        }, err => { throw new Error(err); });
+            this.toast.toastSucess('Picture updated', `The picture ${data.displayName} has bean updated`);
+        });
     }
 
 

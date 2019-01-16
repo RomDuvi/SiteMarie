@@ -1,5 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Component, ErrorHandler } from '@angular/core';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { NavModule } from '../nav/nav.module';
@@ -8,24 +12,27 @@ import { BodyModule } from '../body/body.module';
 import { NavComponent } from '../nav/nav.component';
 import { CardComponent } from '../card/card.component';
 import { PreviewComponent } from '../preview/preview.component';
-import { HttpClientModule } from '@angular/common/http';
 import { AddPictureComponent } from '../pictures/add-picture/add-picture.component';
 import { FooterComponent } from '../footer/footer.component';
-import { RouterModule, Routes } from '@angular/router';
+import { AdminComponent } from '../admin/admin.component';
 import { LoginComponent } from '../login/login.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CategoriesComponent } from '../categories/categories.component';
+import { PicturesComponent } from '../pictures/pictures.component';
+import { AddCategoryComponent } from '../categories/add-category/add-category.component';
+
 import { AuthGuard } from './services/guard/authGuard';
 import { AuthService } from './services/guard/auth.service';
-import { AdminComponent } from '../admin/admin.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { CustomHttpInterceptor } from './services/error/http.interceptor';
+import { ToastGeneratorService } from './services/toastGenerator.service';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faTrash, faPencilAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { CategoriesComponent } from '../categories/categories.component';
 import { AngularDraggableModule } from 'angular2-draggable';
-import { PicturesComponent } from '../pictures/pictures.component';
-import { AddCategoryComponent } from '../categories/add-category/add-category.component';
+import { ToastrModule } from 'ngx-toastr';
+
 
 const appRoutes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -54,6 +61,7 @@ const appRoutes: Routes = [
   imports: [
     NgMultiSelectDropDownModule.forRoot(),
     BrowserModule,
+    BrowserAnimationsModule,
     NavModule,
     BodyModule,
     FormsModule,
@@ -61,6 +69,11 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     AngularDraggableModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true
+    }),
     RouterModule.forRoot(
       appRoutes
     ),
@@ -71,7 +84,13 @@ const appRoutes: Routes = [
   ],
   providers: [
     AuthGuard,
-    AuthService
+    AuthService,
+    ToastGeneratorService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
