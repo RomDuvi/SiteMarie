@@ -42,7 +42,21 @@ export function savePicture(req: Request, res: Response) {
             delete picture.file;
             picture.thumbPath = output;
             //Save picture in database
-            Picture.forge(attributes)
+            updateAttributes(picture, categories, res);
+        });
+    });
+}
+
+export function updatePicture(req: Request, res: Response) {
+    let { categories, ...attributes } = req.body;
+    let picture = attributes;
+    delete picture.fileName;
+    delete picture.file;
+    updateAttributes(picture, categories, res);
+}
+
+export function updateAttributes(picture: IPicture, categories: any, res: Response) {
+    Picture.forge(picture)
                 .save()
                 .tap((picture: any) => Promise.map(categories, (category: ICategory) => { 
                     delete category.pictures;
@@ -51,10 +65,6 @@ export function savePicture(req: Request, res: Response) {
                 .then((picture: IPicture) => {
                     res.json(picture);
                 }).catch((err: any) => res.send(err));
-        });
-    });
-
-
 }
 
 export function getPictureFile(req: Request, res: Response) {
@@ -95,10 +105,6 @@ export function deletePicture(req: Request, res: Response) {
                 res.status(500);
                 res.send(err)
             });
-}
-
-export function updatePicture(req: Request, res: Response) {
-
 }
 
 export function createThumbnail(imagePath: string, callBack: any) {

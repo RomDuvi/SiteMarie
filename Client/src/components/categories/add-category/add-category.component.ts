@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from '../../app/services/category.service';
+import { Category } from 'src/models/category.model';
+import { toJSDate } from '@ng-bootstrap/ng-bootstrap/datepicker/ngb-calendar';
 
 @Component({
   selector: 'app-add-category',
@@ -10,6 +12,7 @@ import { CategoryService } from '../../app/services/category.service';
   providers: [CategoryService]
 })
 export class AddCategoryComponent implements OnInit {
+  @Input() category: Category;
   categoryForm: FormGroup;
   submitted: boolean;
   error: string;
@@ -20,10 +23,17 @@ export class AddCategoryComponent implements OnInit {
     protected categoryService: CategoryService) { }
 
   ngOnInit() {
-    this.categoryForm = this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required]
-    });
+    if (this.category) {
+      this.categoryForm = this.fb.group({
+        name: [this.category.name, Validators.required],
+        description: [this.category.description, Validators.required]
+      });
+    } else {
+      this.categoryForm = this.fb.group({
+        name: ['', Validators.required],
+        description: ['', Validators.required]
+      });
+    }
   }
 
   get f() { return this.categoryForm.controls; }
@@ -35,9 +45,18 @@ export class AddCategoryComponent implements OnInit {
       return;
     }
     this.loading = true;
-    this.categoryService.addCategory(this.categoryForm.value).subscribe(data => {
-      this.loading = false;
-      this.modal.close();
-    });
+    if (this.category) {
+      this.category.name = this.categoryForm.get('name').value;
+      this.category.description = this.categoryForm.get('description').value;
+      this.categoryService.updateCategory(this.category).subscribe(data => {
+        this.loading = false;
+        this.modal.close();
+      });
+    } else {
+      this.categoryService.addCategory(this.categoryForm.value).subscribe(data => {
+        this.loading = false;
+        this.modal.close();
+      });
+    }
   }
 }

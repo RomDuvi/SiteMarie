@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Category } from 'src/models/category.model';
 import { CategoryService } from '../app/services/category.service';
 import { Router } from '@angular/router';
@@ -33,9 +33,11 @@ export class CategoriesComponent implements OnInit {
   }
 
   open() {
-    this.modalService.open(AddCategoryComponent, { size: 'lg' }).result.then((result) => {
-      this.ngOnInit();
-    });
+    this.modalService.open(AddCategoryComponent, { size: 'lg' })
+        .result
+        .then(result => {
+          this.ngOnInit();
+        });
   }
 
   deleteCategory($event: any, index: number) {
@@ -48,10 +50,15 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  editCategory($event: any) {
+  editCategory($event: any, category: any) {
     $event.stopPropagation();
     if (!this.isAdmin) {
       return;
     }
+    const modalRef = this.modalService.open(AddCategoryComponent, {size: 'lg'});
+    modalRef.componentInstance.category = category;
+    modalRef.result.then(result => {
+      this.ngOnInit();
+    });
   }
 }

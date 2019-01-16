@@ -4,7 +4,7 @@
       <div class="card category" (click)="displayCategory(category.id)" >
         <div *ngIf="isAdmin">
           <div class="edit">
-            <button class="btn btn-info" (click)="editCategory($event)"><fa-icon icon="pencil-alt"></fa-icon></button>
+            <button class="btn btn-info" (click)="editCategory($event, category)"><fa-icon icon="pencil-alt"></fa-icon></button>
             <button class="btn btn-danger" (click)="deleteCategory($event, i)"><fa-icon icon="trash"></fa-icon></button>
           </div>
         </div>
@@ -15,7 +15,8 @@
       </div>
     </div>
     <div *ngIf="isAdmin" class="col-lg-4 p-2">
-      <div class="card border-info category" (click)="open(content)">
+      <div class="card 
+      border-info category" (click)="open(content)">
         <div class="card-body text-info">
           <h5 class="card-title text-center">Add Category</h5>
           <div class='text-center'>

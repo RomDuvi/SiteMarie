@@ -19,6 +19,8 @@ export function getCategoryById(req: Request, res: Response){
 export function saveCategory(req: Request, res: Response){
     let category: ICategory = req.body;
     delete category.pictures;
+    delete category.createdAt;
+    delete category.updatedAt;
     Category.forge(category)
         .save()
         .then((category: ICategory) => {

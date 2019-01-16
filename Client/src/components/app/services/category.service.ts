@@ -25,4 +25,8 @@ export class CategoryService extends ConfigService {
     deleteCategory(category: Category): Observable<Category> {
         return this.http.post<Category>(this.apiUrl + '/delete', category, this.httpOptions);
     }
+
+    updateCategory(category: Category): Observable<Category> {
+        return this.http.put<Category>(this.apiUrl, category, this.httpOptions);
+    }
 }
