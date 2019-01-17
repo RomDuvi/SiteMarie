@@ -38,8 +38,6 @@ export function savePicture(req: Request, res: Response) {
         if (err) throw new Error(err);
         createThumbnail(picturePath, (output: string) => {
             if(!output) throw new Error('No output path provided for thumbnail');
-            delete picture.fileName;
-            delete picture.file;
             picture.thumbPath = output;
             //Save picture in database
             updateAttributes(picture, categories, res);
@@ -49,13 +47,15 @@ export function savePicture(req: Request, res: Response) {
 
 export function updatePicture(req: Request, res: Response) {
     let { categories, ...attributes } = req.body;
-    let picture = attributes;
-    delete picture.fileName;
-    delete picture.file;
+    let picture: IPicture = attributes;
     updateAttributes(picture, categories, res);
 }
 
 export function updateAttributes(picture: IPicture, categories: any, res: Response) {
+    delete picture.fileName;
+    delete picture.file;
+    delete picture.createdAt;
+    delete picture.updatedAt;
     Picture.forge(picture)
                 .save()
                 .tap((picture: any) => Promise.map(categories, (category: ICategory) => { 

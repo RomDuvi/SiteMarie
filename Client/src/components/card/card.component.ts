@@ -2,6 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PictureService } from '../app/services/picture.service';
 import { Picture } from '../../models/picture.model';
 import { AuthService } from '../app/services/guard/auth.service';
+import { AddPictureComponent } from '../pictures/add-picture/add-picture.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UpdatePictureComponent } from '../pictures/update-picture/update-picture.component';
 
 @Component({
   selector: 'app-card',
@@ -14,8 +17,11 @@ export class CardComponent implements OnInit {
   @Input() id: number;
   isAdmin: boolean;
 
-  constructor(protected pictureService: PictureService, protected authService: AuthService) {
-  }
+  constructor(
+    protected pictureService: PictureService,
+    protected authService: AuthService,
+    private modalService: NgbModal
+  ) {  }
 
   ngOnInit() {
     this.isAdmin = this.authService.isAdminLogged();
@@ -39,5 +45,10 @@ export class CardComponent implements OnInit {
     if (!this.isAdmin) {
       return;
     }
+    const modalRef = this.modalService.open(UpdatePictureComponent, {size: 'lg'});
+    modalRef.componentInstance.picture = this.picture;
+    modalRef.result.then(result => {
+      this.ngOnInit();
+    });
   }
 }

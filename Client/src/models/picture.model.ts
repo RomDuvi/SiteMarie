@@ -3,7 +3,6 @@ import { BaseModel } from './baseModel.model';
 import { SafeUrl } from '@angular/platform-browser';
 
 export class Picture extends BaseModel {
-    name: string;
     path: string;
     type: string;
     description: string;

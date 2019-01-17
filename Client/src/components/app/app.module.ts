@@ -19,6 +19,7 @@ import { LoginComponent } from '../login/login.component';
 import { CategoriesComponent } from '../categories/categories.component';
 import { PicturesComponent } from '../pictures/pictures.component';
 import { AddCategoryComponent } from '../categories/add-category/add-category.component';
+import { UpdatePictureComponent } from '../pictures/update-picture/update-picture.component';
 
 import { AuthGuard } from './services/guard/authGuard';
 import { AuthService } from './services/guard/auth.service';
@@ -32,6 +33,7 @@ import { faTrash, faPencilAlt, faPlusCircle } from '@fortawesome/free-solid-svg-
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { ToastrModule } from 'ngx-toastr';
+
 
 
 const appRoutes: Routes = [
@@ -56,7 +58,8 @@ const appRoutes: Routes = [
     AdminComponent,
     CategoriesComponent,
     PicturesComponent,
-    AddCategoryComponent
+    AddCategoryComponent,
+    UpdatePictureComponent
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),
@@ -80,7 +83,8 @@ const appRoutes: Routes = [
     FontAwesomeModule
   ],
   entryComponents: [
-    AddCategoryComponent
+    AddCategoryComponent,
+    UpdatePictureComponent
   ],
   providers: [
     AuthGuard,
