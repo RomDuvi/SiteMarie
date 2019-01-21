@@ -25,3 +25,10 @@
 .body{
     min-height: 100%;
 }
+
+.card{
+    transition: 0.2s;
+    margin-bottom : 25px;
+    margin-top: 15px;
+    cursor: pointer;
+}

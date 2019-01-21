@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PictureService } from '../app/services/picture.service';
 import { Picture } from '../../models/picture.model';
 import { AuthService } from '../app/services/guard/auth.service';
-import { AddPictureComponent } from '../pictures/add-picture/add-picture.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UpdatePictureComponent } from '../pictures/update-picture/update-picture.component';
 

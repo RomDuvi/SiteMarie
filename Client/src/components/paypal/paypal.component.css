@@ -1,0 +1,17 @@
+.p-container {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: -3px;
+}
+
+.option {
+    font-weight: bold;
+    color: rgb(95, 118, 141);
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #009CDE;
+    color: white;
+}

@@ -1,5 +1,6 @@
 <footer class="footer">
 <div class="container-fluid text-right">
-  <a [routerLink]="['/login']">manage</a>
+  <a *ngIf="!isAdmin"  [routerLink]="['/login']">manage</a>
+  <a *ngIf="isAdmin" href="#" (click)="logout()" >Log out</a>
 </div>
 </footer>

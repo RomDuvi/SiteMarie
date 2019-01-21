@@ -4,13 +4,15 @@ import { PictureService } from '../../app/services/picture.service';
 import { isNumeric } from 'jquery';
 import { Category } from 'src/models/category.model';
 import { CategoryService } from '../../app/services/category.service';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
   selector: 'app-add-picture',
   templateUrl: './add-picture.component.html',
   styleUrls: ['./add-picture.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [PictureService, CategoryService]
 })
 export class AddPictureComponent implements OnInit {
   pictureForm: FormGroup;
@@ -31,7 +33,9 @@ export class AddPictureComponent implements OnInit {
   constructor(private fb: FormBuilder,
       protected pictureService: PictureService,
       protected categoryService: CategoryService,
-      private cd: ChangeDetectorRef) { }
+      private cd: ChangeDetectorRef,
+      public modal: NgbActiveModal
+  ) { }
 
   ngOnInit() {
     this.categories = [];
@@ -42,6 +46,7 @@ export class AddPictureComponent implements OnInit {
       categories: this.categories,
       file: ['', Validators.required],
       fileName: [''],
+      price: ['', Validators.required],
       type: ['']
     });
     this.categoryService.getCategories().subscribe(data => {

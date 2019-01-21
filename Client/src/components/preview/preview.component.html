@@ -8,8 +8,12 @@
       <div *ngIf="!currentPicture.loaded" class="col-6">
         <img src="../../assets/loading.gif">
       </div>
-      <div class="col-6">
-        <p>{{currentPicture.description}}</p>
+      <div class="col-6 info">
+        <h2>Description</h2>
+        <div class="p-2">
+          <p>{{currentPicture.description}}</p>
+        </div>
+        <app-paypal *ngIf="currentPicture.loaded" [picture]="currentPicture"></app-paypal>
       </div>
       <img src="../../assets/previous.png" id="next" class="np-button" (click)="next()">
     </div>

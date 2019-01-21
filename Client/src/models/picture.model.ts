@@ -12,4 +12,7 @@ export class Picture extends BaseModel {
     loaded = false;
     displayName: string;
     thumbPath: string;
+    width: number;
+    height: number;
+    price: number;
 }

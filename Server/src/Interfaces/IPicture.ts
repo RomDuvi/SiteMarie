@@ -8,4 +8,7 @@ export interface IPicture extends IBaseModel{
     fileName: string;
     type: string;
     thumbPath: string;
+    width: number;
+    height: number;
+    price: number;
 }

@@ -39,8 +39,12 @@ export function savePicture(req: Request, res: Response) {
         createThumbnail(picturePath, (output: string) => {
             if(!output) throw new Error('No output path provided for thumbnail');
             picture.thumbPath = output;
-            //Save picture in database
-            updateAttributes(picture, categories, res);
+            jimp.read(picturePath).then((image: any) => {
+                picture.width = image.bitmap.width;
+                picture.height = image.bitmap.height;
+                //Save picture in database
+                updateAttributes(picture, categories, res);
+            });
         });
     });
 }

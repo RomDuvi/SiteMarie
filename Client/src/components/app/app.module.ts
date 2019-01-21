@@ -33,6 +33,7 @@ import { faTrash, faPencilAlt, faPlusCircle } from '@fortawesome/free-solid-svg-
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { ToastrModule } from 'ngx-toastr';
+import { PaypalComponent } from '../paypal/paypal.component';
 
 
 
@@ -59,7 +60,8 @@ const appRoutes: Routes = [
     CategoriesComponent,
     PicturesComponent,
     AddCategoryComponent,
-    UpdatePictureComponent
+    UpdatePictureComponent,
+    PaypalComponent
   ],
   imports: [
     NgMultiSelectDropDownModule.forRoot(),
@@ -84,7 +86,8 @@ const appRoutes: Routes = [
   ],
   entryComponents: [
     AddCategoryComponent,
-    UpdatePictureComponent
+    UpdatePictureComponent,
+    AddPictureComponent
   ],
   providers: [
     AuthGuard,

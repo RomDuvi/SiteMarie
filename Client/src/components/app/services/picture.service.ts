@@ -12,7 +12,8 @@ export class PictureService extends ConfigService {
     apiUrl: string;
     private _pictures: BehaviorSubject<Picture[]>;
     private dataStore: {
-        pictures: Picture[]
+        pictures: Picture[],
+        picturesByCategory: Picture[]
     };
 
     error;
@@ -23,7 +24,7 @@ export class PictureService extends ConfigService {
     ) {
         super();
         this.apiUrl = this.config.baseUrl + this.config.pictureUrl;
-        this.dataStore = { pictures: [] };
+        this.dataStore = { pictures: [], picturesByCategory: [] };
         this._pictures = <BehaviorSubject<Picture[]>>new BehaviorSubject([]);
     }
 
@@ -43,7 +44,7 @@ export class PictureService extends ConfigService {
           ).subscribe((x: any) => { this.toast.toastSucess('Picture Created', `The picture ${x.displayName} has been created`); } );
     }
 
-    getPictures(callback?, categoryId?) {
+    getPictures(callback?) {
         if (this.dataStore.pictures.length > 0) {
             this.assign();
             if (callback) {
@@ -53,14 +54,7 @@ export class PictureService extends ConfigService {
         }
         this.http.get<Picture[]>(this.apiUrl, this.httpOptions)
                 .subscribe(data => {
-                    if (categoryId) {
-                        this.dataStore.pictures = data.filter(pic => {
-                            const cats = pic.categories.filter(cat => cat.id === +categoryId);
-                            return cats.length > 0;
-                        });
-                    } else {
-                        this.dataStore.pictures = data;
-                    }
+                    this.dataStore.pictures = data;
                     this.assign();
                     if (callback) {
                         callback();
@@ -82,7 +76,17 @@ export class PictureService extends ConfigService {
     }
 
     getPictureByIndex(index: number): Picture {
-        return this.dataStore.pictures[index];
+        return this.dataStore.picturesByCategory[index];
+    }
+
+    getPicturesByCategory(categoryId: number) {
+        const pictures = this.dataStore.pictures;
+        const array =  pictures.filter(pic => {
+            const cats = pic.categories.filter(cat => cat.id === +categoryId);
+            return cats.length > 0;
+        });
+        this.dataStore.picturesByCategory = array;
+        this._pictures.next(Object.assign({}, this.dataStore).picturesByCategory);
     }
 
     get pictures() { return this._pictures.asObservable(); }

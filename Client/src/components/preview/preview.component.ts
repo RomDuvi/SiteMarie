@@ -12,17 +12,22 @@ export class PreviewComponent implements OnInit {
   index = 0;
   pictures: Observable<Picture[]>;
   currentPicture: Picture = new Picture();
+  currentCategory: number;
 
   constructor(
     protected pictureService: PictureService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) { }
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit() {
     this.index = +this.activatedRoute.snapshot.queryParamMap.get('index');
-    console.log(this.index);
+    this.currentCategory = +this.activatedRoute.snapshot.queryParamMap.get('category');
     this.pictures = this.pictureService.pictures;
-    this.pictureService.getPictures(() => this.loadPicture());
+    this.pictureService.getPictures(() => {
+      this.pictureService.getPicturesByCategory(this.currentCategory);
+      this.loadPicture();
+      console.log(this.currentPicture);
+    });
   }
 
   loadPicture() {
