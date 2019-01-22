@@ -1,6 +1,6 @@
 import {Express} from "express";
 import { getAllUsers, getUserById, saveUser, login } from '../Controllers/UserController';
-import { getAllPictures, savePicture, getPictureById, getPictureFile, deletePicture, updatePicture } from '../Controllers/PictureController';
+import { getAllPictures, savePicture, getPictureById, getPictureFile, deletePicture, updatePicture, downloadPictureFile } from '../Controllers/PictureController';
 import { getAllCategories, saveCategory, getCategoryById, deleteCategory } from '../Controllers/CategoryController';
 
 export var userRoutes = (app: Express) => {
@@ -25,6 +25,8 @@ export var pictureRoutes = (app: Express) => {
         .get(getPictureFile);
     app.route('/pictures/delete')
         .post(deletePicture);
+    app.route('/pictures/file/:pictureId/:ratio')
+        .get(downloadPictureFile);
 }
 
 export var categoryRoutes = (app: Express) => {

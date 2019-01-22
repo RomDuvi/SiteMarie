@@ -125,3 +125,31 @@ export function createThumbnail(imagePath: string, callBack: any) {
             .write(output, callBack(output))
     });
 }
+
+export function downloadPictureFile(req: Request, res: Response) {
+    const pictureId = req.params.pictureId;
+    const ratio = req.params.ratio;
+    Picture.forge({'id': pictureId})
+           .fetch()
+           .then((picture: any) => {
+               if(!picture) {
+                   throw new Error('Cannot retrieve picture file');
+               }
+               jimp.read(picture.get('path')).then((image: any) => {
+                   image.scale(1/ratio);
+                   const p = path.join(serverBasePath, config.tempPath, Date.now().toString() +'download.png');
+                   image.write(p,() => {
+                        res.download(p,(err)=>{
+                            if(err) throw new Error('Cannot download picture');
+                            fs.unlink(p, (err: any) => {
+                                if (err) throw err;
+                              });
+                        });
+                        
+                   });
+               })
+           }).catch((err: any) => {
+                res.status(500);
+                res.send(err);
+            });
+}

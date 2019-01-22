@@ -2,8 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { PaypalConfig } from '../../models/paypalConfig.model';
 import { ToastGeneratorService } from '../app/services/toastGenerator.service';
 import { Picture } from 'src/models/picture.model';
-import { Options } from 'selenium-webdriver/safari';
-import { privateEncrypt } from 'crypto';
+import { PictureService } from '../app/services/picture.service';
 declare var paypal: any;
 
 @Component({
@@ -17,7 +16,8 @@ export class PaypalComponent implements OnInit {
   config: PaypalConfig;
 
   constructor(
-    private toast: ToastGeneratorService
+    private toast: ToastGeneratorService,
+    protected pictureService: PictureService
   ) { }
 
   ngOnInit() {
@@ -32,8 +32,13 @@ export class PaypalComponent implements OnInit {
   }
 
   onAuthorize(data, actions) {
+    const option = this.options.find((elem) => {
+      return elem.selected;
+    });
+
     return actions.payment.execute().then((d: any) => {
       this.toast.toastSucess('Order', 'Payment authorized!');
+      this.pictureService.donwloadPictureFile({pictureId: this.picture.id, ratio: option.ratio})
     });
   }
 
@@ -50,9 +55,9 @@ export class PaypalComponent implements OnInit {
     const width = this.picture.width;
     const height = this.picture.height;
 
-    this.options.push(new Option(true, `${width} x ${height} px`, price));
-    this.options.push(new Option(false, `${Math.floor(width / 3)} x ${Math.floor(height / 3)} px`, Math.floor(price / 2)));
-    this.options.push(new Option(false, `${Math.floor(width / 4)} x ${Math.floor(height / 4)} px`, Math.floor(price / 3)));
+    this.options.push(new Option(1, true, `${width} x ${height} px`, price));
+    this.options.push(new Option(3, false, `${Math.floor(width / 3)} x ${Math.floor(height / 3)} px`, Math.floor(price / 2)));
+    this.options.push(new Option(4, false, `${Math.floor(width / 4)} x ${Math.floor(height / 4)} px`, Math.floor(price / 3)));
 
     this.config.createPayment(price, 'EUR');
     this.initButton(this.config);
@@ -70,6 +75,7 @@ export class PaypalComponent implements OnInit {
 
 class Option {
   constructor(
+    public ratio: number,
     public selected: boolean,
     public size: string,
     public price: number

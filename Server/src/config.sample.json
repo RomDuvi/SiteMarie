@@ -1,9 +1,10 @@
 {
-    "picturePath": "./server/assets/pictures/",
+    "picturePath": "../assets/pictures/",
     "appPort": 8081,
     "jwtSecret": "P10VlcW77ak65RtJW5tV",
     "databaseName": "stm",
     "databaseUsername": "root",
     "databasePassword": "depfac$2000",
-    "clientPath": "http://localhost:4200"
+    "clientPath": "http://localhost:4200",
+    "tempPath": "../temp"
 }

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Picture } from '../../../models/picture.model';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConfigService } from './config/config.service';
 import { map, tap, last, catchError } from 'rxjs/operators';
 import { ToastGeneratorService } from './toastGenerator.service';
+import saveAs from 'file-saver';
 
 @Injectable()
 export class PictureService extends ConfigService {
@@ -107,6 +108,14 @@ export class PictureService extends ConfigService {
         });
     }
 
+    donwloadPictureFile(params: any) {
+        this.http.get(this.apiUrl + `/file/${params.picture.id}/${params.ratio}`, {
+            responseType: 'blob',
+            headers: new HttpHeaders().append('Content-Type', 'application/json')
+          }).subscribe((data) => {
+            saveAs(data, params.picture.displayName + '.png');
+        });
+    }
 
     private getEventMessage(event: HttpEvent<any>, fileName: string): any {
         switch (event.type) {
