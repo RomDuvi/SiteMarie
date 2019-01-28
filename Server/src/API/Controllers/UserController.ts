@@ -1,4 +1,4 @@
-import { IUser } from '../../Interfaces/IUser';
+import { IUser } from "../../Interfaces/IUser";
 import { Request, Response } from 'express';
 import { User } from '../../Client/Database/User';
 import * as bcrypt from 'bcrypt-nodejs';

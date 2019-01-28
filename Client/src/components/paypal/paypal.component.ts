@@ -3,6 +3,8 @@ import { PaypalConfig } from '../../models/paypalConfig.model';
 import { ToastGeneratorService } from '../app/services/toastGenerator.service';
 import { Picture } from 'src/models/picture.model';
 import { PictureService } from '../app/services/picture.service';
+import { Command } from '../../models/command.model';
+import { Buyer } from '../../models/buyer.model';
 declare var paypal: any;
 
 @Component({
@@ -22,7 +24,7 @@ export class PaypalComponent implements OnInit {
 
   ngOnInit() {
     this.config = new PaypalConfig((data, actions) => this.onAuthorize(data, actions), () => this.onCancel(), () => this.onError());
-    this.config.env = 'production';
+    // this.config.env = 'production';
     this.initOptions();
   }
 
@@ -37,8 +39,14 @@ export class PaypalComponent implements OnInit {
     });
 
     return actions.payment.execute().then((d: any) => {
+      const buyer: Buyer = d.payer.payer_info;
+      const buyerAddress = `${buyer.shipping_address.line1} ${buyer.shipping_address.postal_code},
+       ${buyer.shipping_address.postal_code} ${buyer.shipping_address.country_code}`;
+      const command = new Command(this.picture.id, buyer.email, buyer.last_name, buyer.first_name, buyerAddress, option.price);
+
       this.toast.toastSucess('Order', 'Payment authorized!');
-      this.pictureService.donwloadPictureFile({pictureId: this.picture.id, ratio: option.ratio})
+      this.pictureService.donwloadPictureFile({picture: this.picture, ratio: option.ratio});
+      this.pictureService.saveCommand(command);
     });
   }
 
@@ -56,8 +64,8 @@ export class PaypalComponent implements OnInit {
     const height = this.picture.height;
 
     this.options.push(new Option(1, true, `${width} x ${height} px`, price));
-    this.options.push(new Option(3, false, `${Math.floor(width / 3)} x ${Math.floor(height / 3)} px`, Math.floor(price / 2)));
-    this.options.push(new Option(4, false, `${Math.floor(width / 4)} x ${Math.floor(height / 4)} px`, Math.floor(price / 3)));
+    this.options.push(new Option(3, false, `${Math.floor(width / 3)} x ${Math.floor(height / 3)} px`, Math.floor(price * 0.8 )));
+    this.options.push(new Option(4, false, `${Math.floor(width / 4)} x ${Math.floor(height / 4)} px`, Math.floor(price * 0.6 )));
 
     this.config.createPayment(price, 'EUR');
     this.initButton(this.config);

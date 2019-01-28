@@ -7,6 +7,8 @@ import { encode } from 'base64-arraybuffer';
 import { serverBasePath } from '../../main';
 import { Promise } from 'bluebird';
 import { ICategory } from '../../Interfaces/ICategory';
+import { Command } from '../../Client/Database/Command';
+import { ICommand } from '../../Interfaces/ICommand';
 
 const path = require('path');
 const fs = require('fs');
@@ -152,4 +154,26 @@ export function downloadPictureFile(req: Request, res: Response) {
                 res.status(500);
                 res.send(err);
             });
+}
+
+export function saveCommand(req: Request, res: Response) {
+    const body = req.body;
+
+    Command.forge(body)
+            .save()
+            .then((data: ICommand) => {
+                res.json(data);
+            }).catch((err: any) => {
+                res.status(500);
+                res.send(err);
+            });
+}
+
+export function getCommands(req: Request, res: Response) {
+    Command.fetchAll({ withRelated: ['picture'] }).then((commands: any) => {
+        res.json(commands);
+    }).catch((err: any) => {
+        res.status(500);
+        res.send(err);
+    });
 }

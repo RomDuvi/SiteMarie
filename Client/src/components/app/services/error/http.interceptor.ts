@@ -28,6 +28,8 @@ export class CustomHttpInterceptor implements HttpInterceptor {
             case 400:
                 this.toast.toastError('Bad request', 'Something is invalid in the request');
                 break;
+            case 401:
+                break;
             case 500:
                 this.toast.toastError('Server error', 'Something wrong append on the server');
                 break;

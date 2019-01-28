@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Picture } from '../../../models/picture.model';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
+import { HttpClient, HttpRequest, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ConfigService } from './config/config.service';
-import { map, tap, last, catchError } from 'rxjs/operators';
+import { map, tap, last } from 'rxjs/operators';
 import { ToastGeneratorService } from './toastGenerator.service';
 import saveAs from 'file-saver';
+import { Command } from 'src/models/command.model';
 
 @Injectable()
 export class PictureService extends ConfigService {
@@ -115,6 +116,16 @@ export class PictureService extends ConfigService {
           }).subscribe((data) => {
             saveAs(data, params.picture.displayName + '.png');
         });
+    }
+
+    saveCommand(command: Command) {
+        this.http.post(this.apiUrl + '/commands', command, this.httpOptions).subscribe((data) => {
+            console.log('Command saved');
+        });
+    }
+
+    getCommands() {
+        return this.http.get(this.apiUrl + '/commands', this.httpOptions);
     }
 
     private getEventMessage(event: HttpEvent<any>, fileName: string): any {
