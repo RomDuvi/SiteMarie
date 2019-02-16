@@ -1,6 +1,7 @@
 <div class="container">
+  <p class="title">Catégories</p>
   <div class="row">
-    <div class="col-lg-4 p-2" *ngFor="let category of categories; index as i">
+    <div class="category-container col-lg-3 p-4" *ngFor="let category of categories; index as i">
       <div class="card category" (click)="displayCategory(category.id)" >
         <div *ngIf="isAdmin">
           <div class="edit">
@@ -8,13 +9,13 @@
             <button class="btn btn-danger" (click)="deleteCategory($event, i)"><fa-icon icon="trash"></fa-icon></button>
           </div>
         </div>
+        <img class="card-img-top" src="../../assets/square.png" alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title text-center">{{category.name}}</h5>
-          <p class="card-text text-center">{{category.description}}</p>
+          <p class="category-name card-title text-center">{{category.name}}</p>
         </div>
       </div>
     </div>
-    <div *ngIf="isAdmin" class="col-lg-4 p-2">
+    <div *ngIf="isAdmin" class="col-lg-3 p-4">
       <div class="card 
       border-info category" (click)="open(content)">
         <div class="card-body text-info">
