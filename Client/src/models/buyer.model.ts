@@ -14,6 +14,7 @@ export class ShippingAddress {
         public city: string,
         public country_code: string,
         public line1: string,
+        public line2: string,
         public postal_code: string,
         public recipient_name: string
     ) {}

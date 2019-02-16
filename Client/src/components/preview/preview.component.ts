@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { PictureService } from '../app/services/picture.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -26,7 +26,6 @@ export class PreviewComponent implements OnInit {
     this.pictureService.getPictures(() => {
       this.pictureService.getPicturesByCategory(this.currentCategory);
       this.loadPicture();
-      console.log(this.currentPicture);
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { PaypalConfig } from '../../models/paypalConfig.model';
 import { ToastGeneratorService } from '../app/services/toastGenerator.service';
 import { Picture } from 'src/models/picture.model';
@@ -12,17 +12,28 @@ declare var paypal: any;
   templateUrl: './paypal.component.html',
   styleUrls: ['./paypal.component.css']
 })
-export class PaypalComponent implements OnInit {
+export class PaypalComponent implements  OnChanges {
   @Input() picture: Picture;
   options: Option[] = [];
   config: PaypalConfig;
+
+  get fileOptions() {
+    return this.options.filter((elem) => {
+      return elem.isFile;
+    });
+  }
+  get posterOptions() {
+    return this.options.filter((elem) => {
+      return !elem.isFile;
+    });
+  }
 
   constructor(
     private toast: ToastGeneratorService,
     protected pictureService: PictureService
   ) { }
 
-  ngOnInit() {
+  ngOnChanges(changes:  SimpleChanges) {
     this.config = new PaypalConfig((data, actions) => this.onAuthorize(data, actions), () => this.onCancel(), () => this.onError());
     // this.config.env = 'production';
     this.initOptions();
@@ -40,12 +51,15 @@ export class PaypalComponent implements OnInit {
 
     return actions.payment.execute().then((d: any) => {
       const buyer: Buyer = d.payer.payer_info;
-      const buyerAddress = `${buyer.shipping_address.line1} ${buyer.shipping_address.postal_code},
-       ${buyer.shipping_address.postal_code} ${buyer.shipping_address.country_code}`;
+      // tslint:disable-next-line:max-line-length
+      const buyerAddress = `${buyer.shipping_address.line1} ${buyer.shipping_address.line2}, ${buyer.shipping_address.postal_code} ${buyer.shipping_address.country_code}`;
       const command = new Command(this.picture.id, buyer.email, buyer.last_name, buyer.first_name, buyerAddress, option.price);
 
       this.toast.toastSucess('Order', 'Payment authorized!');
-      this.pictureService.donwloadPictureFile({picture: this.picture, ratio: option.ratio});
+      if (option.isFile) {
+        this.pictureService.donwloadPictureFile({picture: this.picture, ratio: option.ratio});
+      }
+      console.log(command);
       this.pictureService.saveCommand(command);
     });
   }
@@ -59,6 +73,7 @@ export class PaypalComponent implements OnInit {
   }
 
   initOptions() {
+    this.options = [];
     const price = this.picture.price;
     const width = this.picture.width;
     const height = this.picture.height;
@@ -66,6 +81,11 @@ export class PaypalComponent implements OnInit {
     this.options.push(new Option(1, true, `${width} x ${height} px`, price));
     this.options.push(new Option(3, false, `${Math.floor(width / 3)} x ${Math.floor(height / 3)} px`, Math.floor(price * 0.8 )));
     this.options.push(new Option(4, false, `${Math.floor(width / 4)} x ${Math.floor(height / 4)} px`, Math.floor(price * 0.6 )));
+
+    // Posters
+    this.options.push(new Option(1, false, 'A4', 15, false));
+    this.options.push(new Option(1, false, 'A3', 20, false));
+    this.options.push(new Option(1, false, 'A2', 25, false));
 
     this.config.createPayment(price, 'EUR');
     this.initButton(this.config);
@@ -86,6 +106,7 @@ class Option {
     public ratio: number,
     public selected: boolean,
     public size: string,
-    public price: number
+    public price: number,
+    public isFile: boolean = true
   ) { }
 }
