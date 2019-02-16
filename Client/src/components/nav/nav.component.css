@@ -1,0 +1,17 @@
+@font-face{
+    font-family: 'Valentine';
+    src: url('../../assets/fonts/valentine.ttf') format('truetype')
+}
+
+.nav-container h3{
+    font-family: 'Valentine';
+    font-size: 2.5em;
+    color: white;
+}
+
+.nav-container {
+    text-align: center;
+    background-color: rgb(55, 197, 150);
+    height: 150px;
+    padding: 0;
+}
