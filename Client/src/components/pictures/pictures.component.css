@@ -32,3 +32,9 @@
     margin-top: 15px;
     cursor: pointer;
 }
+
+.container-fluid {
+    background-color:#b1e8d5;
+    padding-top: 25px;
+    padding-left: 35px; 
+}
