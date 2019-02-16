@@ -26,6 +26,9 @@
     min-height: 100%;
 }
 
+.main-container {
+    background-color: white;
+}
 .card{
     transition: 0.2s;
     margin-bottom : 25px;

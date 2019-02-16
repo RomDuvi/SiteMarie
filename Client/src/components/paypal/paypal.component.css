@@ -1,17 +1,28 @@
 .p-container {
     width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0px;
+    font-family: 'YellowSun';
 }
 
 .option {
-    font-weight: bold;
     color: rgb(95, 118, 141);
     cursor: pointer;
+    font-size: 1.5em;
 }
 
 .selected {
-    background-color: #009CDE;
+    background-color: rgb(55, 197, 150);
     color: white;
+}
+
+.section {
+    width: 100%;
+}
+
+.section h4 {
+    margin-bottom: 15px;
+}
+
+.prices {
+    position: absolute;
+    bottom:0px;
 }

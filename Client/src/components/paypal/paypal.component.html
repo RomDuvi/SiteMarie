@@ -1,18 +1,21 @@
-<div class="p-container border-top p-3 ">
-  <h3>Options</h3>
-  <h4>File</h4>
-  <div class="d-flex flex-row border rounded">
-    <div class="text-center col-lg-4 p-3 option align-middle {{option.selected ? 'selected' : ''}}" *ngFor="let option of fileOptions" (click)="selectOption(option)">
-      <div>{{option.size}}</div>
-      <div>{{option.price}}€</div>
+<div class="p-container p-3 prices">
+  <div class="d-flex ">
+    <div id="file" class="section m-2">
+      <h4>Download</h4>
+        <div class="text-center col-lg-12 p-3 mb-3 option align-middle {{option.selected ? 'selected' : ''}} border rounded" *ngFor="let option of fileOptions"
+          (click)="selectOption(option)">
+          <div>{{option.size}}</div>
+          <div>{{option.price}}€</div>
+        </div>
     </div>
-  </div>
-  <h4>Poster</h4>
-  <div class="d-flex flex-row border rounded">
-    <div class="text-center col-lg-4 p-3 option align-middle {{option.selected ? 'selected' : ''}}" *ngFor="let option of posterOptions" (click)="selectOption(option)">
-      <div>{{option.size}}</div>
-      <div>{{option.price}}€</div>
-    </div>
+    <div id="poster" class="section m-2">
+      <h4>Poster</h4>
+        <div class="text-center col-lg-12 p-3 mb-3 option align-middle {{option.selected ? 'selected' : ''}} border rounded" *ngFor="let option of posterOptions"
+          (click)="selectOption(option)">
+          <div>{{option.size}}</div>
+          <div>{{option.price}}€</div>
+        </div>
+      </div>
   </div>
   <div id="paypal-container" class="text-center p-3">
 

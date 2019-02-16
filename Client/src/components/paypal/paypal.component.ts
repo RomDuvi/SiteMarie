@@ -20,11 +20,25 @@ export class PaypalComponent implements  OnChanges {
   get fileOptions() {
     return this.options.filter((elem) => {
       return elem.isFile;
+    }).sort((a, b) => {
+      if (a.price < b.price) {
+        return -1;
+      } else if (a.price === b.price) {
+        return 0;
+      }
+      return 1;
     });
   }
   get posterOptions() {
     return this.options.filter((elem) => {
       return !elem.isFile;
+    }).sort((a, b) => {
+      if (a.price < b.price) {
+        return -1;
+      } else if (a.price === b.price) {
+        return 0;
+      }
+      return 1;
     });
   }
 
